@@ -1,0 +1,163 @@
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+
+    margin: 0;
+
+    overflow: hidden;
+
+    font-family: Arial, sans-serif;
+
+    background: #222;
+
+    color: white;
+
+}
+
+
+
+/* Khu vực 3D */
+
+#viewer {
+
+    width: 100vw;
+
+    height: 100vh;
+
+}
+
+
+
+/* Bảng điều khiển */
+
+#ui {
+
+    position: fixed;
+
+    left: 10px;
+
+    top: 10px;
+
+    width: 280px;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    padding: 15px;
+
+
+    background: rgba(30,30,30,0.9);
+
+    border-radius: 15px;
+
+    z-index: 10;
+
+}
+
+
+
+/* Tiêu đề */
+
+h1 {
+
+    font-size: 22px;
+
+    margin-top: 0;
+
+}
+
+
+h3 {
+
+    margin-bottom: 8px;
+
+}
+
+
+
+/* Input */
+
+input[type="file"] {
+
+    width: 100%;
+
+    padding: 5px;
+
+}
+
+
+
+/* Button */
+
+button {
+
+    width: 100%;
+
+    padding: 10px;
+
+    margin-top: 8px;
+
+
+    border: none;
+
+    border-radius: 10px;
+
+
+    background: #ff7ac8;
+
+    color: white;
+
+    font-size: 15px;
+
+}
+
+
+button:hover {
+
+    opacity: 0.8;
+
+}
+
+
+
+/* BlendShape */
+
+#blendshape {
+
+    max-height: 250px;
+
+    overflow-y: auto;
+
+    padding: 8px;
+
+    background: rgba(255,255,255,0.08);
+
+    border-radius: 8px;
+
+}
+
+
+
+#blendshape input[type="range"] {
+
+    width: 100%;
+
+}
+
+
+
+/* Physics */
+
+#physics {
+
+    padding: 10px;
+
+    background: rgba(255,255,255,0.08);
+
+    border-radius: 8px;
+
+}
