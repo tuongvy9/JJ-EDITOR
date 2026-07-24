@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>JJ VRM Editor</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+<div id="ui">
+
+<h1>🌸 JJ VRM Editor</h1>
+
+
+<h3>📂 Import VRM</h3>
+
+<input 
+type="file"
+id="file"
+accept=".vrm">
+
+
+
+<h3>🎭 Expression / BlendShape</h3>
+
+<div id="blendshape">
+Chưa có VRM
+</div>
+
+
+
+<h3>🎨 Texture Editor</h3>
+
+<input
+type="file"
+id="texture"
+accept="image/*">
+
+<button id="applyTexture">
+Apply Texture
+</button>
+
+
+
+<h3>🌊 Physics</h3>
+
+<div id="physics">
+SpringBone
+</div>
+
+
+</div>
+
+
+
+<div id="viewer"></div>
+
+
+
+<script 
+type="module"
+src="./script.js">
+</script>
+
+
+</body>
+
+</html>
