@@ -1,40 +1,38 @@
-import * as THREE from 
-"https://cdn.jsdelivr.net/npm/three@0.160/build/three.module.js";
+document.getElementById("file").addEventListener("change", (event)=>{
 
-import { GLTFLoader } from 
-"https://cdn.jsdelivr.net/npm/three@0.160/examples/jsm/loaders/GLTFLoader.js";
+    const file = event.target.files[0];
 
-import { OrbitControls } from 
-"https://cdn.jsdelivr.net/npm/three@0.160/examples/jsm/controls/OrbitControls.js";
+    if(!file) return;
 
-import { VRMLoaderPlugin } from 
-"https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@3.3.0/lib/three-vrm.module.js";1.4,
-3
-);
+    const url = URL.createObjectURL(file);
+
+    const loader = new GLTFLoader();
+
+    loader.register(
+        (parser)=> new VRMLoaderPlugin(parser)
+    );
 
 
-renderer = new THREE.WebGLRenderer({
-antialias:true
+    loader.load(
+        url,
+        (gltf)=>{
+
+            const vrm = gltf.userData.vrm;
+
+            scene.add(vrm.scene);
+
+            console.log("VRM đã load thành công!");
+
+        },
+
+        undefined,
+
+        (error)=>{
+            console.error("Lỗi load VRM:", error);
+        }
+    );
+
 });
-
-renderer.setSize(
-window.innerWidth,
-window.innerHeight
-);
-
-document
-.getElementById("viewer")
-.appendChild(renderer.domElement);
-
-
-// Light
-
-const light =
-new THREE.DirectionalLight(
-0xffffff,
-3
-);
-
 light.position.set(1,3,2);
 
 scene.add(light);
