@@ -1,40 +1,14 @@
-import * as THREE from
+import * as THREE from 
 "https://cdn.jsdelivr.net/npm/three@0.160/build/three.module.js";
 
-
-import { OrbitControls } from
+import { OrbitControls } from 
 "https://cdn.jsdelivr.net/npm/three@0.160/examples/jsm/controls/OrbitControls.js";
 
-
-import { GLTFLoader } from
+import { GLTFLoader } from 
 "https://cdn.jsdelivr.net/npm/three@0.160/examples/jsm/loaders/GLTFLoader.js";
 
-
 import { VRMLoaderPlugin } from
-"https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@3.3.0/lib/three-vrm.module.js";
-
-
-
-const viewer =
-document.getElementById("viewer");
-
-
-
-const scene =
-new THREE.Scene();
-
-
-scene.background =
-new THREE.Color(0x202020);
-
-
-
-const camera =
-new THREE.PerspectiveCamera(
-35,
-innerWidth/innerHeight,
-0.1,
-100
+"https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@3.3.0/lib/three-vrm.module.js";100
 );
 
 
