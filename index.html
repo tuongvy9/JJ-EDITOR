@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>My VRM Editor</title>
+<meta charset="UTF-8">
+<title>VRM Editor</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -9,9 +10,15 @@
 
 <h1>VRM Editor</h1>
 
-<input type="file" id="vrmFile">
+<input type="file" id="file" accept=".vrm">
 
-<canvas id="canvas"></canvas>
+<br><br>
+
+<button id="happy"> Happy</button>
+<button id="angry"> Angry</button>
+<button id="blink"> Blink</button>
+
+<div id="viewer"></div>
 
 <script type="module" src="script.js"></script>
 
