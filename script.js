@@ -13,10 +13,9 @@ import {
 "https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@2.1.0/lib/three-vrm.module.js";
 
 
-
-// =================
-// BASIC THREE
-// =================
+// =====================
+// SCENE
+// =====================
 
 const viewer =
 document.getElementById("viewer");
@@ -25,15 +24,19 @@ document.getElementById("viewer");
 const scene =
 new THREE.Scene();
 
+
 scene.background =
 new THREE.Color(0x202020);
 
 
 
+// CAMERA
+
 const camera =
 new THREE.PerspectiveCamera(
 35,
-window.innerWidth / window.innerHeight,
+window.innerWidth /
+window.innerHeight,
 0.1,
 100
 );
@@ -47,15 +50,12 @@ camera.position.set(
 
 
 
+// RENDERER
+
 const renderer =
 new THREE.WebGLRenderer({
     antialias:true
 });
-
-
-renderer.setPixelRatio(
-window.devicePixelRatio
-);
 
 
 renderer.setSize(
@@ -70,7 +70,7 @@ renderer.domElement
 
 
 
-// Light
+// LIGHT
 
 const light =
 new THREE.DirectionalLight(
@@ -78,17 +78,19 @@ new THREE.DirectionalLight(
 3
 );
 
+
 light.position.set(
 1,
 2,
 3
 );
 
+
 scene.add(light);
 
 
 
-// Camera control
+// CONTROL
 
 const controls =
 new OrbitControls(
@@ -108,17 +110,15 @@ controls.update();
 
 
 
-// =================
-// VRM
-// =================
+// =====================
+// VRM LOAD
+// =====================
 
 let currentVRM = null;
 
 
-
 const loader =
 new GLTFLoader();
-
 
 
 loader.register(
@@ -128,17 +128,17 @@ new VRMLoaderPlugin(parser)
 
 
 
-// Upload VRM
+const fileInput =
+document.getElementById("file");
 
-document
-.getElementById("file")
-.addEventListener(
+
+fileInput.addEventListener(
 "change",
-(event)=>{
+(e)=>{
 
 
 const file =
-event.target.files[0];
+e.target.files[0];
 
 
 if(!file)
@@ -171,10 +171,11 @@ const vrm =
 gltf.userData.vrm;
 
 
+
 if(!vrm){
 
-console.error(
-"File này không phải VRM"
+alert(
+"Không phải file VRM"
 );
 
 return;
@@ -193,7 +194,8 @@ currentVRM.scene
 
 
 
-currentVRM = vrm;
+currentVRM =
+vrm;
 
 
 scene.add(
@@ -203,20 +205,9 @@ vrm.scene
 
 
 console.log(
-"VRM Loaded",
+"VRM Loaded:",
 vrm
 );
-
-
-
-createBlendShape();
-
-
-
-document.getElementById(
-"physics"
-).innerText =
-"VRM Loaded - SpringBone Ready";
 
 
 },
@@ -227,7 +218,6 @@ undefined,
 (error)=>{
 
 console.error(
-"VRM Error:",
 error
 );
 
@@ -235,188 +225,13 @@ error
 
 );
 
-
 }
 
 
 
-
-
-// =================
-// BLENDSHAPE
-// =================
-
-
-function createBlendShape(){
-
-
-const box =
-document.getElementById(
-"blendshape"
-);
-
-
-box.innerHTML="";
-
-
-if(
-!currentVRM.expressionManager
-){
-
-box.innerHTML =
-"Model không có Expression";
-
-
-return;
-
-}
-
-
-
-const expressions =
-currentVRM.expressionManager.expressionMap;
-
-
-
-for(
-const name in expressions
-){
-
-
-const label =
-document.createElement("div");
-
-
-label.innerText =
-name;
-
-
-
-const slider =
-document.createElement("input");
-
-
-slider.type =
-"range";
-
-slider.min = 0;
-
-slider.max = 1;
-
-slider.step = 0.01;
-
-
-
-slider.oninput =
-()=>{
-
-
-currentVRM
-.expressionManager
-.setValue(
-name,
-Number(slider.value)
-);
-
-
-};
-
-
-
-box.appendChild(label);
-
-box.appendChild(slider);
-
-
-}
-
-
-}
-
-
-
-
-
-// =================
-// TEXTURE EDITOR
-// =================
-
-
-let texture = null;
-
-
-
-document
-.getElementById("texture")
-.addEventListener(
-"change",
-(e)=>{
-
-
-const file =
-e.target.files[0];
-
-
-if(!file)
-return;
-
-
-
-new THREE.TextureLoader()
-.load(
-URL.createObjectURL(file),
-(t)=>{
-
-texture=t;
-
-}
-
-);
-
-
-});
-
-
-
-document
-.getElementById("applyTexture")
-.onclick =
-()=>{
-
-
-if(!currentVRM || !texture)
-return;
-
-
-
-currentVRM.scene.traverse(
-(obj)=>{
-
-
-if(obj.isMesh){
-
-obj.material.map =
-texture;
-
-obj.material.needsUpdate =
-true;
-
-}
-
-
-});
-
-
-};
-
-
-
-
-
-// =================
+// =====================
 // ANIMATION
-// =================
-
+// =====================
 
 const clock =
 new THREE.Clock();
@@ -431,7 +246,6 @@ animate
 );
 
 
-
 if(currentVRM){
 
 currentVRM.update(
@@ -439,7 +253,6 @@ clock.getDelta()
 );
 
 }
-
 
 
 renderer.render(
@@ -455,9 +268,9 @@ animate();
 
 
 
-
-
-// Resize
+// =====================
+// RESIZE
+// =====================
 
 window.addEventListener(
 "resize",
