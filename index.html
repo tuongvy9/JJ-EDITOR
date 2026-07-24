@@ -1,40 +1,85 @@
 <!DOCTYPE html>
+<html lang="vi">
 
-<html>
-	<head>
-		<meta charset="utf-8" />
-		<title>three-vrm example</title>
-		<meta
-			name="viewport"
-			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
-		/>
-		<style>
-			body {
-				margin: 0;
-				background: #000;
-			}
-			canvas {
-				display: block;
-			}
-		</style>
-	</head>
+<head>
 
-	<body>
-		<script type="importmap">
-			{
-				"imports": {
-					"three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.webgpu.js",
-					"three/webgpu": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.webgpu.js",
-					"three/tsl": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.tsl.js",
-					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
-					"@pixiv/three-vrm": "../lib/three-vrm.module.js",
-					"@pixiv/three-vrm/nodes": "../lib/nodes/index.module.js"
-				}
-			}
-		</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-		<script type="module">
-			import * as THREE from 'three/webgpu';
+<title>JJ VRM Editor</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<div class="panel">
+
+<h2>🌸 JJ VRM Editor</h2>
+
+
+<h3>Import VRM</h3>
+
+<input 
+id="file"
+type="file"
+accept=".vrm">
+
+
+
+<h3>🎭 Expression / BlendShape</h3>
+
+<div id="blendshape"></div>
+
+
+
+<h3>🎨 Texture Editor</h3>
+
+<input
+id="texture"
+type="file"
+accept="image/*">
+
+
+<button id="applyTexture">
+Apply Texture
+</button>
+
+
+
+
+<h3>🌊 Physics</h3>
+
+<label>
+SpringBone
+</label>
+
+<div id="physics">
+Chưa tải VRM
+</div>
+
+
+</div>
+
+
+
+<div id="viewer"></div>
+
+
+
+<script 
+type="module"
+src="script.js">
+
+</script>
+
+
+</body>
+
+</html>			import * as THREE from 'three/webgpu';
 			import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 			import { VRMLoaderPlugin, MToonMaterialLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
