@@ -1,82 +1,51 @@
 <!DOCTYPE html>
-<html lang="vi">
-
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>JJ VRM Editor</title>
-
+<title>JJ-EDITOR VRM 0.0</title>
 <link rel="stylesheet" href="style.css">
-
 </head>
-
 
 <body>
 
-<div id="ui">
+<div id="panel">
 
-<h1>🌸 JJ VRM Editor</h1>
+<h2>JJ-EDITOR</h2>
 
-
-<h3>📂 Import VRM</h3>
-
-<input 
-type="file"
-id="file"
-accept=".vrm">
+<input id="vrmFile" type="file" accept=".vrm">
 
 
-
-<h3>🎭 Expression / BlendShape</h3>
-
-<div id="blendshape">
-Chưa có VRM
+<h3>Expression / BlendShape</h3>
+<div id="expressions">
+Chưa load VRM
 </div>
 
 
+<h3>Texture Editor</h3>
 
-<h3>🎨 Texture Editor</h3>
+<input id="textureFile" type="file" accept="image/*">
 
-<input
-type="file"
-id="texture"
-accept="image/*">
-
-<button id="applyTexture">
-Apply Texture
-</button>
+<div id="textureList">
+Chưa có material
+</div>
 
 
-
-<h3>🌊 Physics</h3>
+<h3>Physics</h3>
 
 <div id="physics">
-SpringBone
+Chưa load Physics
 </div>
 
 
-<h3>💾 Export</h3>
-
-<button id="exportVRM">
-Export VRM
+<button id="export">
+Export VRM 0.0
 </button>
 
 
 </div>
 
 
-
-<div id="viewer"></div>
-
-
-
-<script 
-type="module"
-src="./script.js">
-</script>
-
+<script type="module" src="./script.js"></script>
 
 </body>
-
 </html>
