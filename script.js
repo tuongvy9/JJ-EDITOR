@@ -1,374 +1,50 @@
-import * as THREE from "./libs/three/three.module.js";
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { VRMLoaderPlugin } from '@pixiv/three-vrm';
 
-import { GLTFLoader }
-from "./libs/three/GLTFLoader.js";
+// 1. Basic Three.js Setup
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 0.1, 20.0);
+camera.position.set(0.0, 1.4, 1.4);
 
-import { OrbitControls }
-from "./libs/three/OrbitControls.js";
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
-import {
-VRMLoaderPlugin,
-VRMUtils
-}
-from "./libs/three-vrm/three-vrm.module.js";
+// 2. Configure GLTFLoader with the VRM Plugin
+const loader = new GLTFLoader();
+loader.register((parser) => new VRMLoaderPlugin(parser));
 
-
-const scene =
-new THREE.Scene();
-
-scene.background =
-new THREE.Color(0x202020);
-
-
-
-const camera =
-new THREE.PerspectiveCamera(
-35,
-innerWidth/innerHeight,
-0.1,
-100
-);
-
-camera.position.set(
-0,1.3,3
-);
-
-
-
-const renderer =
-new THREE.WebGLRenderer({
-antialias:true
-});
-
-
-renderer.setSize(
-innerWidth,
-innerHeight
-);
-
-document.body.appendChild(
-renderer.domElement
-);
-
-
-
-const light =
-new THREE.DirectionalLight(
-0xffffff,
-3
-);
-
-light.position.set(
-1,2,3
-);
-
-scene.add(light);
-
-
-
-const controls =
-new OrbitControls(
-camera,
-renderer.domElement
-);
-
-controls.target.set(
-0,1,0
-);
-
-controls.update();
-
-
-
-const loader =
-new GLTFLoader();
-
-
-loader.register(
-(parser)=>
-new VRMLoaderPlugin(parser)
-);
-
-
-
-let currentVRM = null;
-
-
-
-document
-.getElementById("vrmFile")
-.onchange=(e)=>{
-
-
-const file =
-e.target.files[0];
-
-if(!file)return;
-
-
-loadVRM(
-URL.createObjectURL(file)
-);
-
-};
-
-
-
-
-function loadVRM(url){
-
-
+// 3. Load the Model
+let currentVrm = null;
 loader.load(
-url,
-
-(gltf)=>{
-
-
-const vrm =
-gltf.userData.vrm;
-
-
-
-if(currentVRM)
-scene.remove(
-currentVRM.scene
+  '/path/to/your/avatar.vrm',
+  (gltf) => {
+    const vrm = gltf.userData.vrm;
+    currentVrm = vrm;
+    
+    // Add avatar model to the scene
+    scene.add(vrm.scene);
+    
+    // Un-rotate the model if necessary (VRM looks towards +Z)
+    vrm.scene.rotation.y = Math.PI; 
+    console.log('VRM loaded successfully:', vrm);
+  },
+  (progress) => console.log(`Loading: ${Math.round((progress.loaded / progress.total) * 100)}%`),
+  (error) => console.error('Error loading VRM:', error)
 );
 
-
-
-VRMUtils.rotateVRM0(vrm);
-
-
-currentVRM =
-vrm;
-
-
-scene.add(
-vrm.scene
-);
-
-
-
-createBlendShape(vrm);
-
-createTextureList(vrm);
-
-createPhysics(vrm);
-
-
-console.log(
-"VRM 0.0 Loaded",
-vrm
-);
-
-
+// 4. Update Loop (Required for Spring Bones & Animations)
+const clock = new THREE.Clock();
+function animate() {
+  requestAnimationFrame(animate);
+  
+  const deltaTime = clock.getDelta();
+  if (currentVrm) {
+    // Ticks physical simulations like hair/clothing movement
+    currentVrm.update(deltaTime); 
+  }
+  
+  renderer.render(scene, camera);
 }
-
-);
-
-
-}
-
-
-
-
-// BlendShape Slider
-
-function createBlendShape(vrm){
-
-
-const box =
-document.getElementById(
-"expressions"
-);
-
-box.innerHTML="";
-
-
-const proxy =
-vrm.blendShapeProxy;
-
-
-if(!proxy){
-
-box.innerHTML=
-"Không có BlendShape";
-
-return;
-
-}
-
-
-
-proxy._blendShapeGroups
-.forEach(
-(group)=>{
-
-
-const name =
-group.name;
-
-
-const label =
-document.createElement("label");
-
-
-const slider =
-document.createElement("input");
-
-
-slider.type="range";
-slider.min=0;
-slider.max=100;
-
-
-
-slider.oninput=()=>{
-
-
-label.innerText =
-name+" "+slider.value+"%";
-
-
-proxy.setValue(
-name,
-slider.value/100
-);
-
-
-};
-
-
-
-label.innerText =
-name+" 0%";
-
-
-box.appendChild(label);
-
-box.appendChild(
-slider
-);
-
-box.appendChild(
-document.createElement("br")
-);
-
-
-});
-
-}
-
-
-
-// Texture
-
-function createTextureList(vrm){
-
-
-const box =
-document.getElementById(
-"textureList"
-);
-
-
-box.innerHTML="";
-
-
-vrm.scene.traverse(
-(obj)=>{
-
-
-if(obj.material){
-
-
-box.innerHTML +=
-obj.name+"<br>";
-
-}
-
-
-});
-
-
-}
-
-
-
-// Physics
-
-function createPhysics(vrm){
-
-
-const box =
-document.getElementById(
-"physics"
-);
-
-
-if(vrm.springBoneManager){
-
-box.innerText =
-"SpringBone đã có";
-
-
-}else{
-
-
-box.innerText =
-"Không có Physics";
-
-}
-
-
-}
-
-
-
-
-// Export
-
-document
-.getElementById("export")
-.onclick=()=>{
-
-
-alert(
-"Export VRM 0.0 sẽ thêm ở bước tiếp theo"
-);
-
-
-};
-
-
-
-
-
-const clock =
-new THREE.Clock();
-
-
-function animate(){
-
-
-requestAnimationFrame(
-animate
-);
-
-
-if(currentVRM)
-currentVRM.update(
-clock.getDelta()
-);
-
-
-renderer.render(
-scene,
-camera
-);
-
-
-}
-
-
 animate();
